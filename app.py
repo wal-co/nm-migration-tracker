@@ -1,0 +1,17 @@
+from flask import Flask, render_template, jsonify 
+from ebird_client import EBirdClient
+from data import get_yearly_observations, build_presence_matrix, sort_matrix
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+@app.route("/api/observations")
+def observations():
+    client = EBirdClient()
+    yearly = get_yearly_observations(client)
+    matrix = sort_matrix(build_presence_matrix(yearly)) 
+    return jsonify(matrix)
+if __name__ == "__main__":
+    app.run(debug=True)
