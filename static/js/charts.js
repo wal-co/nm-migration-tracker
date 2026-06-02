@@ -29,13 +29,12 @@ function renderBarChart(data) {
   container.appendChild(header)
 
   //Create species rows
-  for (const [species, presentMonths] of Object.entries(data)) {
+  for (const [species, bird] of Object.entries(data)) {
     const row = document.createElement("div")
     row.className = "bar-row"
-    row.innerHTML = `<div class="species-name">${species}</div>` +
-        // loop through 1-12, create a cell for each month
+    row.innerHTML = row.innerHTML = `<a href="https://ebird.org/species/${bird.species_code}" target="_blank" class="species-name">${bird.common_name}</a>` +        // loop through 1-12, create a cell for each month
       Array.from({length: 12}, (_, i) => i + 1)
-        .map(month => presentMonths.includes(month) ? 
+        .map(month => bird.months.includes(month) ? 
           `<div class="month-cell present"></div>` : 
           `<div class="month-cell"></div>`)
         .join("")

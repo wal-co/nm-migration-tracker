@@ -13,6 +13,7 @@ def observations():
     client = EBirdClient(region)
     yearly = get_cached_observations(client)
     matrix = sort_matrix(build_presence_matrix(yearly)) 
-    return jsonify(matrix)
+    serializable = {species: bird.to_dict() for species, bird in matrix.items()}
+    return jsonify(serializable)
 if __name__ == "__main__":
     app.run(debug=True)

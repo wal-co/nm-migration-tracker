@@ -1,6 +1,7 @@
 import time
 import json
 import os
+from models import Bird
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 
@@ -31,18 +32,21 @@ def build_presence_matrix(observations):
         species = obs["comName"]
         # get the month from obsDT
         month = datetime.fromisoformat(obs["obsDt"]).month
-        # add the month to matrix[species] if not already there
+        # add the Bird obj to matrix[species] if not already there
         if species not in matrix:
-            matrix[species] = [month]
+            matrix[species] = Bird(
+                    common_name=species, 
+                    species_code=obs["speciesCode"],
+                    months=[month])
         else:
-            if month not in matrix[species]:
-                matrix[species].append(month)
+            if month not in matrix[species].months:
+                matrix[species].months.append(month)
     return matrix
 
 def sort_matrix(matrix):
     # Sort months of species matrix
-    for species, months in matrix.items():
-        months.sort()
+    for species, bird in matrix.items():
+        bird.months.sort()
     return matrix
 
 def get_yearly_observations(client, year=2025):
