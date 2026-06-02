@@ -1,11 +1,33 @@
+let allData = {}
+
 fetch("/api/observations")
     .then(response => response.json())
     .then(data => {
-        renderBarChart(data)
+      allData = data
+      renderBarChart(data)
     })
+
+document.getElementById("species-search").addEventListener("input", applyFilters)
+document.getElementById("family-search").addEventListener("input", applyFilters)
+
+function applyFilters() {
+  const nameSearch = document.getElementById("species-search").value.toLowerCase()
+  const familySearch = document.getElementById("family-search").value.toLowerCase()
+
+  const filtered = Object.fromEntries(
+    Object.entries(allData).filter(([species, bird]) => {
+      const matchesName = bird.common_name.toLowerCase().includes(nameSearch)
+      const matchesFamily = bird.family.toLowerCase().includes(familySearch)
+      return matchesName && matchesFamily
+    })
+  )
+
+  renderBarChart(filtered)
+}
 
 function renderBarChart(data) {
   const container = document.getElementById("bar-view")
+  container.innerHTML = ""
   const months = [
     "January", 
     "February",

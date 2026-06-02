@@ -29,6 +29,7 @@ class EBirdClient:
             print("Connection error: Check your network")
             return []
 
-
+    def get_taxonomy(self):
+        return self._make_request("ref/taxonomy/ebird?fmt=json")
 
 

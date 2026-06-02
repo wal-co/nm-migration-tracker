@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 
 CACHE_FILE = "cache/observations.json"
+TAXONOMY_CACHE_FILE = "cache/taxonomy.json"
 CACHE_EXPIRY_HOURS = 24
 
 def get_cached_observations(client, year=2025):
@@ -25,7 +26,21 @@ def get_cached_observations(client, year=2025):
 
     return data
 
-def build_presence_matrix(observations):
+def get_cached_taxonomy(client):
+    if os.path.exists(TAXONOMY_CACHE_FILE):
+        modified_time = datetime.fromtimestamp(os.path.getmtime(TAXONOMY_CACHE_FILE))
+        # Cache life = 30 days
+        if datetime.now() - modified_time < timedelta(days=30):
+            with open(TAXONOMY_CACHE_FILE, "r") as f:
+                return json.load(f)
+
+    taxonomy = client.get_taxonomy()
+    os.makedirs("cache", exist_ok=True)
+    with open(TAXONOMY_CACHE_FILE, "w") as f:
+        json.dump(taxonomy, f)
+    return taxonomy
+
+def build_presence_matrix(observations, taxonomy_lookup):
     matrix = {}
     for obs in observations:
         #get the species name from comName
@@ -37,7 +52,9 @@ def build_presence_matrix(observations):
             matrix[species] = Bird(
                     common_name=species, 
                     species_code=obs["speciesCode"],
-                    months=[month])
+                    months=[month],
+                    familyComName=taxonomy_lookup.get(obs["speciesCode"], "Unknown")
+                )
         else:
             if month not in matrix[species].months:
                 matrix[species].months.append(month)
@@ -60,3 +77,6 @@ def get_yearly_observations(client, year=2025):
     print(f"Fetched in {time.time() - start:.2f}s")
     return hist_data
 
+def build_taxonomy_lookup(client):
+    taxonomy = get_cached_taxonomy(client)
+    return {t["speciesCode"]: t.get("familyComName", "Unknown") for t in taxonomy}

@@ -6,6 +6,10 @@
 </head>
 <body>
     <h1>NM Bird Migration Tracker</h1>
+    <label for="species-search">Search species by name:</label>
+    <input type="text" id="species-search" placeholder="eg. Sandhill Crane">    
+    <label for="family-search">Seach species by family:</label>
+    <input type="text" id="family-search" placeholder="eg. Woodpecker">
     <div id="bar-view"></div>
     <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
 </body>
