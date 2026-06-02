@@ -2,8 +2,11 @@
 <html>
 <head>
     <title>NM Bird Migration Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>NM Bird Migration Tracker</h1>
+    <div id="bar-view"></div>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
 </body>
 </html>

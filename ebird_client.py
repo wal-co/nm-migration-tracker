@@ -5,9 +5,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class EBirdClient:
-    def __init__(self):
+    def __init__(self, region="US"):
         self.api_key = os.getenv("EBIRD_API_KEY")
-        self.region = "US-NM"
+        self.region = region
 
     def get_recent_observations(self):
         return self._make_request(f"data/obs/{self.region}/recent")

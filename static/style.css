@@ -1,0 +1,30 @@
+.month-header, .bar-row {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    gap: 2px;
+    margin-bottom: 3px;
+    align-items: center;
+}
+
+.month-label {
+    font-size: 11px;
+    text-align: center;
+    color: #888;
+}
+
+.species-name {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.month-cell {
+    height: 14px;
+    border-radius: 2px;
+    background: #eee;
+}
+
+.month-cell.present {
+    background: #1D9E75;
+}
