@@ -50,14 +50,10 @@ def build_presence_matrix(observations, taxonomy_lookup):
         # add the Bird obj to matrix[species] if not already there
         if species not in matrix:
             matrix[species] = Bird(
-                    common_name=species, 
-                    species_code=obs["speciesCode"],
-                    months=[month],
-                    familyComName=taxonomy_lookup.get(obs["speciesCode"], "Unknown")
+                    obs,
+                    taxonomy_lookup
                 )
-        else:
-            if month not in matrix[species].months:
-                matrix[species].months.append(month)
+        matrix[species].add_months_seen(month)
     return matrix
 
 def sort_matrix(matrix):
@@ -74,7 +70,7 @@ def get_yearly_observations(client, year=2025):
     with ThreadPoolExecutor() as executor:
         results = list(executor.map(fetch_month, range(1, 13)))
     hist_data = [obs for month_results in results for obs in month_results]
-    print(f"Fetched in {time.time() - start:.2f}s")
+    # print(f"Fetched in {time.time() - start:.2f}s")
     return hist_data
 
 def build_taxonomy_lookup(client):

@@ -5,12 +5,38 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>NM Bird Migration Tracker</h1>
-    <label for="species-search">Search species by name:</label>
-    <input type="text" id="species-search" placeholder="eg. Sandhill Crane">    
-    <label for="family-search">Seach species by family:</label>
-    <input type="text" id="family-search" placeholder="eg. Woodpecker">
-    <div id="bar-view"></div>
+    <nav id="top-nav">
+      <div id="nav-logo">🐦 Migration Tracker</div>
+      <div id="nav-views">
+        <button class="view-btn active" data-view="bar">Calendar</button>
+        <button class="view-btn" data-view="map">Map</button>
+      </div>
+    </nav>
+
+    <div id="main-layout">
+      <aside id="sidebar">
+        <div id="filters">
+          <div class="filter-group">
+            <label for="species-search">Search species by name:</label>
+            <input type="text" id="species-search" placeholder="eg. Sandhill Crane">    
+          </div>
+          <div class="filter-group">
+            <label for="month-toggle">Months Present</label>
+            <button id="month-toggle"> Months▾</button>
+            <div id="month-pills" style="display:none"></div>
+          </div>
+          </div>
+          <div class="filter-group">
+            <label for="family-toggle">Filter by Family</label>
+            <button id="family-toggle"> Families▾</button>
+            <div id="family-pills" style="display:none"></div>
+        </div>
+      </aside>
+      <main id="content">
+        <div id="bar-view"></div>
+      </main>
+    </div>
+
     <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
 </body>
 </html>

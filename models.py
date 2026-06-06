@@ -1,15 +1,13 @@
 class Bird:
-    def __init__(self, common_name, species_code, months, familyComName):
-        self.common_name = common_name
-        self.species_code = species_code
-        self.months = months
-        self.family = familyComName
+    def __init__(self, obs, taxonomy_lookup):
+        for key, value in obs.items():
+            setattr(self, key, value)
+        self.family = taxonomy_lookup.get(obs["speciesCode"], "Unkown")
+        self.months = []
 
     def to_dict(self):
-        return {
-                "common_name": self.common_name,
-                "species_code": self.species_code,
-                "months": self.months,
-                "family": self.family
-            }
+        return self.__dict__
 
+    def add_months_seen(self, month):
+        if month not in self.months:
+            self.months.append(month)
